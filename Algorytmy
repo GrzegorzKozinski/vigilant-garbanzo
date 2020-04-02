@@ -1,0 +1,496 @@
+#include "pch.h"
+#include <iostream>
+#include <ctime>
+#include "conio.h"
+ 
+using namespace std;
+int s, x;
+                                                //  wyszukiwanie binarne
+int binSearch(int l, int p, int a[])
+{
+   
+ 
+    if (l > p) return -1;
+    s = (l + p) / 2;      
+    if (a[s] > x) return binSearch(l, s - 1, a);  
+    if (a[s] < x) return binSearch(s + 1, p, a);  
+    return s;
+}
+ 
+void znajdzDominante(int n, int a[])                                                    // algorytm znajdujacy dominante danego zbioru
+{                                                                                       // jego złożoność wynosi O(n^2)
+    int    y, z, maxy, maxz;                                                          
+    maxy = 1;
+ 
+    for (int i = 0; i < n; i++)
+    {
+        z = a[i];
+        y = 0;
+ 
+        for (int j = 0; j < n; j++) if (z == a[j]) y++;
+ 
+        if (y > maxy)
+        {
+            maxy = y;
+            maxz = z;
+        }
+    }
+    (maxy == 1) ? printf("Brak najczesciej wyst. wartosc zbioru: \n") : printf("Najczesciej wyst. wartosc zbioru: %d - wystepuje %d razy\n", maxz, maxy);
+}
+                                                // BUBBLE SORT
+void bubbleSort(int n, int tab[])
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 1; j < n - i; j++) if (tab[j - 1] > tab[j]) swap(tab[j - 1], tab[j]); //zamiana miejsc
+    }
+}
+                                                //insert sort
+void insertSort(int n, int a[])
+{
+    int x, i, k, liczba_zmian;
+    liczba_zmian = 0;
+    cout << "------------- Insert Sort -----------\n";
+    for (i = 1; i < n; i++)
+    {
+        k = i;    
+        x = a[k];
+ 
+        while (k >= 1 && x < a[k - 1])
+        {
+            a[k] = a[k - 1];        
+            k--;
+            liczba_zmian++;
+        }    
+ 
+        a[k] = x;
+    }
+    printf("Liczba przejsc petli while ==> %d\n", liczba_zmian);
+    cout << "---------------------------------------\n" << endl;
+   
+}
+                                                //select sort inv
+void selectSortInv(int n, int a[])
+{
+    int maxx, jmax,liczba_zmian;
+    liczba_zmian = 0;
+    cout << "------------- selectSortInv -----------\n";
+    for (int k = 0; k < n - 1; k++)
+    {
+        maxx = a[k]; // kandydat na maximum  
+        jmax=k; for (int j=k+1; j<n; j++)
+            if (a[j]>maxx)        
+            {
+                maxx=a[j];
+                jmax=j;         //zmiana kandydata na minimum
+                liczba_zmian++;
+            }
+ 
+            a[jmax]=a[k];    
+            a[k]=maxx;  
+           
+    }
+    printf("Liczba zmian  ==> %d\nLiczba podstawien ==> %d\n", liczba_zmian, n-1);
+   
+    cout << "---------------------------------------\n" << endl;
+   
+}    
+                                                //select sort
+void selectSort(int n, int a[])
+{
+    int minx, jmin,liczba_zmian;
+    liczba_zmian = 0;
+    cout << "------------- selectSort -----------\n";
+    for (int k = 0; k < n - 1; k++)
+    {
+        minx = a[k]; // kandydat na minimum    
+        jmin=k; for (int j=k+1; j<n; j++)
+            if (a[j]<minx)        
+            {
+                minx=a[j];
+                jmin=j;         //zmiana kandydata na minimum
+                liczba_zmian++;
+            }
+            a[jmin]=a[k];    
+            a[k]=minx;  
+           
+    }
+    printf("Liczba zmian  ==> %d\nLiczba podstawien ==> %d\n", liczba_zmian, n-1);
+   
+    cout << "------------------------------------\n" << endl;
+   
+}
+                                                // drukuj  
+void drukujTablice(int k, int a[])
+{
+    //cout << endl;
+    for (int i = 0; i < k; i++) printf("Liczba %d >> %d\n", i, a[i]);
+    cout << endl;
+}
+                                                // losowa tablica
+int *randomArr(int k)                           // generator losowej tablicy liczb całokiwtych
+{
+    srand(time(0));
+    int *tab = new int[k];
+    for (int i = 0; i < k; i++) tab[i] = rand() % 100;
+    return tab;
+    delete[] tab;
+}  
+ 
+ 
+int main()
+{
+    int k;
+ 
+    printf("Podaj rozmiar tablicy:\n");
+    cin >> k;
+ 
+    int *tablica = new int[k];
+   
+   
+    tablica = randomArr(k);
+    cout << "Tablica losowa:\n";                    // losowa tablica k-elem.
+    drukujTablice(k, tablica);                    
+ 
+                                                    // selectSort START    
+                                                    /*
+    cout << "Sortowanie losowej rosnaco:\n";      
+    selectSort(k, tablica);                             // sortowanie selectSort rosnąco losowo generowanej tablicy  
+    drukujTablice(k, tablica);
+ 
+    cout << "Sortowanie rosnaco rosnacej:\n";
+    selectSort(k, tablica);                             // select Sort tablicy posortowanej rosnąco
+   
+    cout<<"Sortowanie malejaco tablicy rosnacej:\n";
+    selectSortInv(k, tablica);
+    drukujTablice(k, tablica);
+   
+                                                    */
+                                                    // selectSort KONIEC  
+                                                   
+                                                    //insertSort START
+                                                    /*
+    cout << "Sortowanie losowej rosnaco:\n";
+    ros = (insertSort(k, randomArr(k)));          
+   
+    cout << "Sortowanie rosnaco rosnacej:\n";
+    insertSort(k, ros);
+ 
+    cout << "Odworcenie kolejn:\n";
+    selectSortInv(k, ros);
+ 
+    cout << "Sortowanie malejaco tablicy rosnacej:\n";
+    insertSort(k, ros);
+ 
+                                                    */
+                                                    //insertSort KONIEC
+   
+                                                    // Zadanie 1
+                                                    // Dla obu algorytmów:
+                                                    // W optymistycznym przypadku (t.j. dla tablicy posortowanej rosnąco) dodatkowe instrukcje nie będą się wykonywać ani razu.   Czas dziłania O(n)
+                                                    // W pesymistycznym przypadku (tablica posortowana malejąco) instrukje dodatkowe zadziałają n razy dla każdej iteracji pętli. Czas dziłania O(n^2)
+                                                    // Dla tablicy losowej (przypadek pośredni) dodatkowa instrukcja wykona się około 2 razy rzadziej niż dla przypadku pes.      Czas dziłania O(n^2)
+   
+ 
+ 
+ 
+                                                // bubble sort START
+    //bubbleSort(k,tablica);
+    //drukujTablice(k, tablica);
+                                                // bubble sort KONEIC
+                                               
+                                                // zad 2 i 3
+ 
+                                                // Idea sortowania bąbelkowego
+                                                // Polega na porównywaniu dwóch kolejnych elementów i zamianie ich kolejności,
+                                                // jeżeli zaburza ona porządek, w jakim się sortuje tablicę.
+                                                // Sortowanie kończy się, gdy podczas kolejnego przejścia nie dokonano żadnej zmiany.
+                                                // funkcja wykonuje instrukcje zgodnie z założeniami sortowania bąbelkowego  [patrz funckja bubbleSort]
+                                                // Podobnie jak w przypadku sortowania przez selekcję bądź wstawianie, najmniej operacji algorytm wykonuje dla zbiorów posortowanych
+                                                // najwięcej dla posortowanych odwrotnie. Złożoność obliczeniowa tego algorytmu wynosi O(n^2)
+ 
+                                                // zad 4 patrz funkcja: znajdzDominante
+                                               
+    //znajdzDominante(k, tablica);
+                                                // zad 5
+   
+    bubbleSort(k,tablica);
+    drukujTablice(k, tablica);
+    printf("liczbe do znalezienia:\n");
+    cin >> x;
+ 
+   
+    s = binSearch(0, k, tablica);
+    s == -1 ? printf("Brak takiej liczby.\n") : printf("%d ma indeks %d \n", tablica[s], s);
+   
+ 
+ 
+ 
+                                                // zad 6
+                                                // wyszukiwanie binarne dla n:
+                                                // 10 >> log2(10) ~ 3
+                                                // 100 >> log2(100) ~ 7
+                                                // 1000 >> log2(1000) ~ 10
+                                                // 1 000 000 >> log2(1000 000) ~ 20
+                                                // 1 000 000 000 >> log2(1000 000 000) ~ 30
+ 
+ 
+    _getch();
+    delete[] tablica;
+    return 0;
+ 
+
+    }
+
+RAW Paste Data
+#include "pch.h"
+#include <iostream>
+#include <ctime>
+#include "conio.h"
+ 
+using namespace std;
+int s, x;
+                                                //  wyszukiwanie binarne
+int binSearch(int l, int p, int a[])
+{
+   
+ 
+    if (l > p) return -1;
+    s = (l + p) / 2;       
+    if (a[s] > x) return binSearch(l, s - 1, a);   
+    if (a[s] < x) return binSearch(s + 1, p, a);   
+    return s;
+}
+ 
+void znajdzDominante(int n, int a[])                                                    // algorytm znajdujacy dominante danego zbioru 
+{                                                                                       // jego złożoność wynosi O(n^2)
+    int    y, z, maxy, maxz;                                                           
+    maxy = 1;
+ 
+    for (int i = 0; i < n; i++)
+    {
+        z = a[i];
+        y = 0;
+ 
+        for (int j = 0; j < n; j++) if (z == a[j]) y++;
+ 
+        if (y > maxy)
+        {
+            maxy = y;
+            maxz = z;
+        }
+    }
+    (maxy == 1) ? printf("Brak najczesciej wyst. wartosc zbioru: \n") : printf("Najczesciej wyst. wartosc zbioru: %d - wystepuje %d razy\n", maxz, maxy);
+}
+                                                // BUBBLE SORT
+void bubbleSort(int n, int tab[])
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 1; j < n - i; j++) if (tab[j - 1] > tab[j]) swap(tab[j - 1], tab[j]); //zamiana miejsc
+    }
+}
+                                                //insert sort
+void insertSort(int n, int a[])
+{
+    int x, i, k, liczba_zmian;
+    liczba_zmian = 0;
+    cout << "------------- Insert Sort -----------\n";
+    for (i = 1; i < n; i++)
+    {
+        k = i;    
+        x = a[k];
+ 
+        while (k >= 1 && x < a[k - 1])
+        {
+            a[k] = a[k - 1];        
+            k--;
+            liczba_zmian++;
+        }    
+ 
+        a[k] = x;
+    }
+    printf("Liczba przejsc petli while ==> %d\n", liczba_zmian);
+    cout << "---------------------------------------\n" << endl;
+   
+}
+                                                //select sort inv
+void selectSortInv(int n, int a[])
+{
+    int maxx, jmax,liczba_zmian;
+    liczba_zmian = 0;
+    cout << "------------- selectSortInv -----------\n";
+    for (int k = 0; k < n - 1; k++)
+    {
+        maxx = a[k]; // kandydat na maximum  
+        jmax=k; for (int j=k+1; j<n; j++)
+            if (a[j]>maxx)        
+            {
+                maxx=a[j];
+                jmax=j;         //zmiana kandydata na minimum
+                liczba_zmian++;
+            }
+ 
+            a[jmax]=a[k];    
+            a[k]=maxx;  
+           
+    }
+    printf("Liczba zmian  ==> %d\nLiczba podstawien ==> %d\n", liczba_zmian, n-1);
+   
+    cout << "---------------------------------------\n" << endl;
+   
+}    
+                                                //select sort
+void selectSort(int n, int a[])
+{
+    int minx, jmin,liczba_zmian;
+    liczba_zmian = 0;
+    cout << "------------- selectSort -----------\n";
+    for (int k = 0; k < n - 1; k++)
+    {
+        minx = a[k]; // kandydat na minimum    
+        jmin=k; for (int j=k+1; j<n; j++)
+            if (a[j]<minx)        
+            {
+                minx=a[j];
+                jmin=j;         //zmiana kandydata na minimum
+                liczba_zmian++;
+            }
+            a[jmin]=a[k];    
+            a[k]=minx;  
+           
+    }
+    printf("Liczba zmian  ==> %d\nLiczba podstawien ==> %d\n", liczba_zmian, n-1);
+   
+    cout << "------------------------------------\n" << endl;
+   
+}
+                                                // drukuj  
+void drukujTablice(int k, int a[])
+{
+    //cout << endl;
+    for (int i = 0; i < k; i++) printf("Liczba %d >> %d\n", i, a[i]);
+    cout << endl;
+}
+                                                // losowa tablica
+int *randomArr(int k)                           // generator losowej tablicy liczb całokiwtych
+{
+    srand(time(0));
+    int *tab = new int[k];
+    for (int i = 0; i < k; i++) tab[i] = rand() % 100;
+    return tab;
+    delete[] tab;
+}  
+ 
+ 
+int main()
+{
+    int k;
+ 
+    printf("Podaj rozmiar tablicy:\n");
+    cin >> k;
+ 
+    int *tablica = new int[k];
+   
+   
+    tablica = randomArr(k);
+    cout << "Tablica losowa:\n";                    // losowa tablica k-elem.
+    drukujTablice(k, tablica);                     
+ 
+                                                    // selectSort START    
+                                                    /*
+    cout << "Sortowanie losowej rosnaco:\n";       
+    selectSort(k, tablica);                             // sortowanie selectSort rosnąco losowo generowanej tablicy   
+    drukujTablice(k, tablica);
+ 
+    cout << "Sortowanie rosnaco rosnacej:\n";
+    selectSort(k, tablica);                             // select Sort tablicy posortowanej rosnąco
+   
+    cout<<"Sortowanie malejaco tablicy rosnacej:\n";
+    selectSortInv(k, tablica);
+    drukujTablice(k, tablica); 
+   
+                                                    */
+                                                    // selectSort KONIEC   
+                                                   
+                                                    //insertSort START
+                                                    /*
+    cout << "Sortowanie losowej rosnaco:\n";
+    ros = (insertSort(k, randomArr(k)));           
+   
+    cout << "Sortowanie rosnaco rosnacej:\n";
+    insertSort(k, ros);
+ 
+    cout << "Odworcenie kolejn:\n";
+    selectSortInv(k, ros);
+ 
+    cout << "Sortowanie malejaco tablicy rosnacej:\n";
+    insertSort(k, ros);
+ 
+                                                    */
+                                                    //insertSort KONIEC
+   
+                                                    // Zadanie 1
+                                                    // Dla obu algorytmów:
+                                                    // W optymistycznym przypadku (t.j. dla tablicy posortowanej rosnąco) dodatkowe instrukcje nie będą się wykonywać ani razu.   Czas dziłania O(n)
+                                                    // W pesymistycznym przypadku (tablica posortowana malejąco) instrukje dodatkowe zadziałają n razy dla każdej iteracji pętli. Czas dziłania O(n^2)
+                                                    // Dla tablicy losowej (przypadek pośredni) dodatkowa instrukcja wykona się około 2 razy rzadziej niż dla przypadku pes.      Czas dziłania O(n^2)
+   
+ 
+ 
+ 
+                                                // bubble sort START
+    //bubbleSort(k,tablica);
+    //drukujTablice(k, tablica);
+                                                // bubble sort KONEIC
+                                               
+                                                // zad 2 i 3
+ 
+                                                // Idea sortowania bąbelkowego
+                                                // Polega na porównywaniu dwóch kolejnych elementów i zamianie ich kolejności,
+                                                // jeżeli zaburza ona porządek, w jakim się sortuje tablicę.
+                                                // Sortowanie kończy się, gdy podczas kolejnego przejścia nie dokonano żadnej zmiany.
+                                                // funkcja wykonuje instrukcje zgodnie z założeniami sortowania bąbelkowego  [patrz funckja bubbleSort]
+                                                // Podobnie jak w przypadku sortowania przez selekcję bądź wstawianie, najmniej operacji algorytm wykonuje dla zbiorów posortowanych
+                                                // najwięcej dla posortowanych odwrotnie. Złożoność obliczeniowa tego algorytmu wynosi O(n^2)
+ 
+                                                // zad 4 patrz funkcja: znajdzDominante
+                                               
+    //znajdzDominante(k, tablica);
+                                                // zad 5
+   
+    bubbleSort(k,tablica);
+    drukujTablice(k, tablica);
+    printf("liczbe do znalezienia:\n");
+    cin >> x;
+ 
+   
+    s = binSearch(0, k, tablica);
+    s == -1 ? printf("Brak takiej liczby.\n") : printf("%d ma indeks %d \n", tablica[s], s);
+   
+ 
+ 
+ 
+                                                // zad 6
+                                                // wyszukiwanie binarne dla n:
+                                                // 10 >> log2(10) ~ 3
+                                                // 100 >> log2(100) ~ 7
+                                                // 1000 >> log2(1000) ~ 10
+                                                // 1 000 000 >> log2(1000 000) ~ 20
+                                                // 1 000 000 000 >> log2(1000 000 000) ~ 30
+ 
+ 
+    _getch();
+    delete[] tablica;
+    return 0;
+ 
+}
+We use cookies for various purposes including analytics. By continuing to use Pastebin, you agree to our use of cookies as described in the Cookies Policy. OK, I Understand
+Not a member of Pastebin yet?
+Sign Up, it unlocks many cool features!
+ 
+create new paste  /  dealsnew!  /  syntax languages  /  archive  /  faq  /  tools  /  night mode  /  api  /  scraping api	
+privacy statement  /  cookies policy  /  terms of service  /  security disclosure  /  dmca  /  contact
+
+By using Pastebin.com you agree to our cookies policy to enhance your experience.
+Site design & logo © 2020 Pastebin; user contributions (pastes) licensed under cc by-sa 3.0 Dedicated Server Hosting by Steadfast
